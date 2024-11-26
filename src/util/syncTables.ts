@@ -3,6 +3,7 @@ import { registerPlayerModels } from "../models/Player";
 import { registerLeagueModels } from "../models/League";
 import { registerMatchModels } from "../models/Match";
 import { registerPlatformSettingsModels } from "../models/platformSettings";
+import { registerAnnouncementModels } from "../models/Announcement";
 //import { registerLeagueModels } from "../models/League";
 //import { registerMatchModels } from "../models/Match";
 export default async (sequelizeimport: Sequelize) => {
@@ -10,4 +11,5 @@ export default async (sequelizeimport: Sequelize) => {
   await registerPlayerModels(sequelizeimport);
   await registerMatchModels(sequelizeimport);
   await registerPlatformSettingsModels(sequelizeimport);
+  await registerAnnouncementModels(sequelizeimport);
 };
