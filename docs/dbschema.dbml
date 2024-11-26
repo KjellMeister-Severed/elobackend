@@ -1,0 +1,72 @@
+enum players {
+    "playerOne"
+    "playerTwo"
+}
+
+enum userRole {
+    "admin"
+    "user"
+}
+
+Table platformSettings {
+    id varchar [pk]
+    showMaintenance boolean [not null]
+    showTechnicalDifficulties boolean [not null]
+    nextMaintenance dateTime
+}
+
+Table player {
+    id varchar [pk]
+    displayName varchar [not null]
+    playerTag varchar [not null]
+    username varchar [not null, unique]
+    password varchar [not null]
+    email varchar [not null, unique]
+    role userRole [not null]
+}
+
+Table matchEntry {
+    id varchar [pk, unique]
+    playerOneEnrollmentId varchar [ref: < playerEnrollment.id]
+    playerTwoEnrollmentId varchar [ref: < playerEnrollment.id]
+    playerOneResult int [not null]
+    playerTwoResult int [not null]
+    tournamentLink varchar [not null]
+    wonBy players [not null]
+    entryDate dateTime [not null]
+}
+
+Table playerEnrollment {
+    id varchar [pk, unique]
+    playerId varchar [not null]
+    leagueId varchar [not null]
+    isOwner boolean [not null]
+    isOrganizer boolean
+    elo number [not null]
+}
+
+Ref: playerEnrollment.playerId <> player.id
+Ref: playerEnrollment.leagueId <> league.id
+
+Table leagueSettings {
+    id varchar [pk, unique]
+    entryRequiresMeleeGG boolean [null]
+    leagueLogo varchar [null]
+    leagueId varchar [ref: - league.id]
+}
+
+Table league {
+    id varchar [pk, unique]
+    leagueName varchar [not null]
+    leagueDeadline datetime [null]
+    isPrivate boolean [not null]
+    password varchar [not null]
+}
+
+Table announcements {
+    id varchar [pk, unique]
+    description varchar [null]
+    isPublished boolean [default: false]
+    leagueId varchar [ref: > league.id]
+    datePublished datetime
+}
