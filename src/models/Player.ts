@@ -23,6 +23,7 @@ export interface PlayerI
   password: string;
   email: string;
   role: UserRole;
+  refreshToken?: string;
 }
 
 export interface PlayerEnrollmentI
@@ -53,8 +54,8 @@ export const registerPlayerModels = async (sequelize: Sequelize) => {
     },
     playerTag: {
       type: DataTypes.STRING,
-      unique: true,
       allowNull: false,
+      unique: false,
     },
     userName: {
       type: DataTypes.STRING,
@@ -73,6 +74,10 @@ export const registerPlayerModels = async (sequelize: Sequelize) => {
     role: {
       type: DataTypes.ENUM("admin", "user"),
       allowNull: false,
+    },
+    refreshToken: {
+      type: DataTypes.STRING,
+      allowNull: true,
     },
   });
 

@@ -2,6 +2,7 @@ import express from "express";
 import dotenv from "dotenv";
 import { Sequelize } from "sequelize";
 import syncTables from "./util/syncTables";
+import { registerAuthRoutes } from "./util/registerRoutes";
 
 dotenv.config();
 
@@ -9,6 +10,7 @@ export const sequelize = new Sequelize(process.env.PGCONNECTIONSTRING || "", {
   schema: "platform",
 });
 const app = express();
+app.use(express.json());
 const port = process.env.PORT || 3000;
 
 //initialize db connection before registering routes
@@ -23,6 +25,7 @@ sequelize
       await sequelize.sync({ alter: true });
       console.log("[Sequelize Models -> Loaded]:", sequelize.models);
     }
+    registerAuthRoutes(app);
   })
   // on error, register a general route that returns generic outage error
   .catch((e) => {
