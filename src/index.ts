@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import { Sequelize } from "sequelize";
 import syncTables from "./util/syncTables";
 import { registerAuthRoutes } from "./util/registerRoutes";
+import { registerGenericPaths } from "./services/registerGenericPaths";
 
 dotenv.config();
 
@@ -26,6 +27,16 @@ sequelize
       console.log("[Sequelize Models -> Loaded]:", sequelize.models);
     }
     registerAuthRoutes(app);
+    registerGenericPaths(app);
+    app.get("*", (req, res) => {
+      res.status(404).json({
+        status: 404,
+        errorCode: "service.notfound",
+        message: "Resource not found.",
+        instance: "*",
+      });
+    });
+    console.log(app._router.stack);
   })
   // on error, register a general route that returns generic outage error
   .catch((e) => {

@@ -75,7 +75,7 @@ export const registerAuthRoutes = (app: Express) => {
         )?.payload as TokenFormatI;
         const user = await Player.findOne({
           where: {
-            [Op.or]: [
+            [Op.and]: [
               { id: decodedToken.id },
               { refreshToken: decodedToken.refreshToken },
             ],
@@ -143,14 +143,5 @@ export const registerAuthRoutes = (app: Express) => {
           instance: "*",
         });
       });
-  });
-
-  app.get("*", (req, res) => {
-    res.status(404).json({
-      status: 404,
-      errorCode: "service.notfound",
-      message: "Resource not found.",
-      instance: "*",
-    });
   });
 };
